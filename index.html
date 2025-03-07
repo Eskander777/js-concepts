@@ -3,6 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .images {
+        margin-top: 1rem;
+        position: relative;
+      }
+
+      .images__item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 90vh;
+        transition: opacity 1s ease-out;
+      }
+
+      .images__item > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .images__item--invisible {
+        opacity: 0;
+      }
+    </style>
     <title>Document</title>
     <!-- <script type="module" src="/debounce.js" defer></script> -->
     <!-- <script type="module" src="/this_example.js" defer></script> -->
@@ -22,6 +52,48 @@
     <div>
       <button data-promise>Start promise</button>
     </div>
+    <div class="images">
+      <div class="images__item images__item--invisible">
+        <img
+          src="https://sun9-12.userapi.com/impg/C1xCLuv-VKVomi1IYcJHMYoBR86dyrFrqfRZEw/zyUQZAGMhuc.jpg?size=1300x857&quality=95&sign=2b8750f30422fdc3d84df0e8979f51c6&c_uniq_tag=4k6Zz2Uqgvb_rMHtybih_PWPguLKSABL7z3EeBsluNQ&type=album"
+          alt="Spring 1"
+        />
+      </div>
+      <div class="images__item images__item--invisible">
+        <img
+          src="https://gtksuzdal.ru/content/sobytia/exkurs/Winter_The_Church_with_blue_domes_044911_14(1).jpg"
+          alt="Spring 2"
+        />
+      </div>
+      <div class="images__item">
+        <img
+          src="https://cdn.culture.ru/images/afd1c039-125f-5090-b919-e118c5c4ec51"
+          alt="Spring 3"
+        />
+      </div>
+    </div>
+    <script>
+      (function () {
+        let currentImageVisible = 0;
+        const imagesEls = document.querySelectorAll('.images__item ');
+
+        setInterval(() => {
+          imagesEls.forEach((el, index) => {
+            if (index === currentImageVisible) {
+              el.classList.remove('images__item--invisible');
+            } else {
+              el.classList.add('images__item--invisible');
+            }
+          });
+
+          if (currentImageVisible < imagesEls.length - 1) {
+            ++currentImageVisible;
+          } else {
+            currentImageVisible = 0;
+          }
+        }, 3000);
+      })();
+    </script>
   </body>
 </html>
 
