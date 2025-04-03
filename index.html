@@ -12,6 +12,7 @@
       .images {
         margin-top: 1rem;
         position: relative;
+        height: 90vh;
       }
 
       .images__item {
@@ -19,7 +20,7 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: 90vh;
+        height: 100%;
         transition: opacity 1s ease-out;
       }
 
@@ -31,6 +32,35 @@
 
       .images__item--invisible {
         opacity: 0;
+      }
+
+      .droppable {
+        margin: 2rem;
+        width: 400px;
+        height: 280px;
+        border: 1px solid black;
+        border-radius: 4px;
+      }
+
+      .show-one {
+        width: 90%;
+        height: 60vh;
+        position: relative;
+        overflow-y: hidden;
+      }
+
+      .show-one:hover > .show-one__image:last-child {
+        display: none;
+      }
+
+      .show-one__image {
+        position: absolute;
+      }
+
+      .show-one__image > img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
       }
     </style>
     <title>Document</title>
@@ -53,29 +83,44 @@
       <button data-promise>Start promise</button>
     </div>
     <div class="images">
-      <div class="images__item images__item--invisible">
+      <div data-image-item="" class="images__item images__item--invisible">
         <img
           src="https://sun9-12.userapi.com/impg/C1xCLuv-VKVomi1IYcJHMYoBR86dyrFrqfRZEw/zyUQZAGMhuc.jpg?size=1300x857&quality=95&sign=2b8750f30422fdc3d84df0e8979f51c6&c_uniq_tag=4k6Zz2Uqgvb_rMHtybih_PWPguLKSABL7z3EeBsluNQ&type=album"
           alt="Spring 1"
         />
       </div>
-      <div class="images__item images__item--invisible">
+      <div data-image-item="" class="images__item images__item--invisible">
         <img
           src="https://gtksuzdal.ru/content/sobytia/exkurs/Winter_The_Church_with_blue_domes_044911_14(1).jpg"
           alt="Spring 2"
         />
       </div>
-      <div class="images__item">
+      <div data-image-item="" class="images__item">
         <img
           src="https://cdn.culture.ru/images/afd1c039-125f-5090-b919-e118c5c4ec51"
           alt="Spring 3"
         />
       </div>
     </div>
+    <div class="droppable"></div>
+    <div class="show-one">
+      <div class="show-one__image">
+        <img
+          src="https://sun9-12.userapi.com/impg/C1xCLuv-VKVomi1IYcJHMYoBR86dyrFrqfRZEw/zyUQZAGMhuc.jpg?size=1300x857&quality=95&sign=2b8750f30422fdc3d84df0e8979f51c6&c_uniq_tag=4k6Zz2Uqgvb_rMHtybih_PWPguLKSABL7z3EeBsluNQ&type=album"
+          alt="Spring 1"
+        />
+      </div>
+      <div class="show-one__image">
+        <img
+          src="https://gtksuzdal.ru/content/sobytia/exkurs/Winter_The_Church_with_blue_domes_044911_14(1).jpg"
+          alt="Spring 2"
+        />
+      </div>
+    </div>
     <script>
       (function () {
         let currentImageVisible = 0;
-        const imagesEls = document.querySelectorAll('.images__item ');
+        const imagesEls = document.querySelectorAll('[data-image-item]');
 
         setInterval(() => {
           imagesEls.forEach((el, index) => {
@@ -86,12 +131,46 @@
             }
           });
 
+          // Here, when "currentImageVisible" equals 1 it
+          // passes an if-check and becomes 2. And to work
+          // properly slider needs "currentImageVisible" to be not
+          // more than index of the last item.
           if (currentImageVisible < imagesEls.length - 1) {
             ++currentImageVisible;
           } else {
             currentImageVisible = 0;
           }
         }, 3000);
+      })();
+    </script>
+    <script>
+      (function () {
+        const droppableEl = document.querySelector('.droppable');
+
+        // By default adding image files to browser will open this file in
+        // browser window. That's why we change default behavior of
+        // 'dragover'and 'drop' events.
+        ['dragover', 'drop'].forEach(function (event) {
+          document.addEventListener(event, function (evt) {
+            evt.preventDefault();
+          });
+        });
+
+        droppableEl.addEventListener('dragenter', function () {
+          this.style.backgroundColor = 'red';
+        });
+        droppableEl.addEventListener('dragleave', function () {
+          this.style.backgroundColor = 'blue';
+        });
+
+        // In event of 'drop' we have nullable property 'dataTransfer'
+        // it containes value of dragged element.
+        droppableEl.addEventListener('drop', function (e) {
+          if (e.dataTransfer) {
+            console.log(e.dataTransfer);
+          }
+          this.style.backgroundColor = 'transparent';
+        });
       })();
     </script>
   </body>
